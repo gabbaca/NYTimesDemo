@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using NYTimesDemo.Data;
+using MudBlazor.Services;
+using NYTimesDemo.Services;
+using NYTimesDemo.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddMudServices();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<INYTimesService, NYTimesService>();
 
 var app = builder.Build();
 

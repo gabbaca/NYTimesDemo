@@ -1,0 +1,57 @@
+﻿<MudGrid>
+    <MudItem xs="12" sm="12">
+        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+            <MudGrid>
+                <MudItem sm="2">
+                    <div>
+                        <h4>
+                            Timeline of events for the past
+                            <MudSelect T="int" Label="days" Margin="Margin.Dense" FullWidth="false" Style="width: 50px;" @bind-Value="NYTimesPeriodInt" SelectedValuesChanged="(values) => OnSelectedValuesChanged(values)">
+                                <MudSelectItem T="int" Value="(int)NYTimesPeriodEnum.LastDay" />
+                                <MudSelectItem T="int" Value="(int)NYTimesPeriodEnum.LastSevenDays" />
+                                <MudSelectItem T="int" Value="(int)NYTimesPeriodEnum.LastThirtyDays" />
+                            </MudSelect>
+                            @if (IsLoading)
+                            {
+                                <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+                            }
+                        </h4>
+                    </div>
+                </MudItem>
+            </MudGrid>
+            <div>                
+                @if (NYTimesResults != null)
+                {
+                    <MudTimeline>
+                        @foreach (var item in NYTimesResults)
+                        {
+                            <MudTimelineItem Color="Color.Info" Size="Size.Medium" Elevation="25">
+                                <ItemOpposite>
+                                    <MudText Color="Color.Info" Typo="Typo.h5">@FormatShortDate(item.PublishedDate)</MudText>
+                                </ItemOpposite>
+                                <ItemContent>
+                                    <MudCard Elevation="25">
+                                        <MudCardContent>
+                                            <MudText Color="Color.Info" Typo="Typo.h6" GutterBottom="true">@item.Section</MudText>
+                                            @if (item.Media != null)
+                                            {
+                                                string imgSource = GetImageUrlFromMedia(item.Media);                                                
+                                                <MudImage Src="@imgSource" Elevation="25" Class="rounded-lg" />
+                                            }
+                                            <MudText Typo="Typo.body2">@item.Title</MudText>
+                                            <MudText Typo="Typo.body1">@item.Abstract</MudText>
+                                            <MudLink Href="@item.Url.ToString()" Target="_blank">Read More...</MudLink>
+                                        </MudCardContent>
+                                    </MudCard>
+                                </ItemContent>
+                            </MudTimelineItem>
+                        }
+                    </MudTimeline>
+                }
+                else if (NYTimesResults == null && !IsLoading) {
+                    <p>No data to display for the selected time period.</p>
+                }
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
